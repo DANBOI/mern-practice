@@ -2,6 +2,7 @@ import express from "express";
 // import http from "http";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
+import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 //load configrations from .env
 dotenv.config();
@@ -16,5 +17,8 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
 app.use("/api/users", userRoutes);
-
 app.get("/", (req, res) => res.send("API running!"));
+
+// catch-all-in-one
+app.use(notFound);
+app.use(errorHandler);
