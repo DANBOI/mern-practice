@@ -20,6 +20,10 @@ connectDB();
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
+//req data parsing middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/api/users", userRoutes);
 app.get("/", (req, res) => res.send("API running!"));
 
