@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
+import connectDB from "./config/db.js";
 
 //load configrations from .env
 dotenv.config();
@@ -10,6 +11,9 @@ dotenv.config();
 const app = express();
 // console.log(process.env.PORT);
 const port = process.env.PORT || 5000;
+
+// connect to mongodb
+connectDB();
 
 // const server = http.createServer(app);
 // server.listen(port, () => console.log(`Server started on port ${port}`));
