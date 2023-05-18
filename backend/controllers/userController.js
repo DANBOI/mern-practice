@@ -81,17 +81,16 @@ export const getProfile = asyncHandler(async (req, res) => {
 // @access  Private
 export const updateProfile = asyncHandler(async (req, res) => {
   const { user, body } = req;
-  if (!body) {
-    res.status(404);
+
+  // empty body
+  if (!Object.keys(body).length) {
+    res.status(401);
     throw new Error("No update data provided");
   }
 
   const currentUser = await User.findById(user._id);
-
   if (currentUser) {
-    currentUser.name = body.name || currentUser.name;
-    currentUser.email = body.email || currentUser.email;
-    currentUser.password = body.password || currentUser.password;
+    Object.assign(currentUser, { ...body });
 
     const updatedUser = await currentUser.save();
     const { _id, name, email } = updatedUser;
