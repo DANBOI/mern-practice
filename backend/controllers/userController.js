@@ -32,26 +32,73 @@ export const register = asyncHandler(async (req, res) => {
 // @route   POST /api/users/auth
 // @access  Public
 export const authenticate = asyncHandler(async (req, res) => {
-  res.send("auth user");
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  const checked = await user?.checkPassword(password);
+
+  if (checked) {
+    const { _id, name, email } = user;
+    generateToken(res, _id);
+    res.json({ _id, name, email }); //200
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
 });
 
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 // @access  Public
 export const logout = (req, res) => {
-  res.send("logout user");
+  //clear token
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.json({ message: "Logged out successfully" });
 };
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
 export const getProfile = asyncHandler(async (req, res) => {
-  res.send("get profile");
+  //passed by protect middleware
+  const { user } = req;
+
+  if (user) {
+    const { _id, name, email } = user;
+    res.json({ _id, name, email });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
 });
 
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
 export const updateProfile = asyncHandler(async (req, res) => {
-  res.send("update profile");
+  const { user, body } = req;
+  if (!body) {
+    res.status(404);
+    throw new Error("No update data provided");
+  }
+
+  const currentUser = await User.findById(user._id);
+
+  if (currentUser) {
+    currentUser.name = body.name || currentUser.name;
+    currentUser.email = body.email || currentUser.email;
+    currentUser.password = body.password || currentUser.password;
+
+    const updatedUser = await currentUser.save();
+    const { _id, name, email } = updatedUser;
+
+    res.json({ _id, name, email });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
 });

@@ -30,6 +30,12 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+// compare plain pw to hashed pw
+userSchema.methods.checkPassword = async function (enteredPassword) {
+  //  return a promise
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
 const User = mongoose.model("User", userSchema);
 
 export default User;
