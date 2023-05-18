@@ -1,6 +1,7 @@
 import express from "express";
 // import http from "http";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 import connectDB from "./config/db.js";
@@ -23,6 +24,7 @@ app.listen(port, () => console.log(`Server started on port ${port}`));
 //req data parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
 app.get("/", (req, res) => res.send("API running!"));
