@@ -9,6 +9,8 @@ import {
 
 import App from "./App.jsx";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
+// import Signup from "./pages/Signup";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -17,6 +19,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} element={<Home />} />
+      <Route index={true} path="/login" element={<Login />} />
+      {/* <Route index={true} path="/signup" element={<Signup />} /> */}
     </Route>
   )
 );
