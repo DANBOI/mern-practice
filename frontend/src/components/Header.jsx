@@ -6,7 +6,7 @@ import { FaSignInAlt } from "react-icons/fa";
 
 const Header = () => {
   return (
-    <header>
+    <header className="border-bottom">
       <Navbar bg="light" variant="light" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">

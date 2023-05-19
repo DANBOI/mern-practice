@@ -1,9 +1,10 @@
 import Hero from "../components/Hero";
 const Home = () => {
   return (
-    <div>
+    <>
       <Hero />
-    </div>
+      <p className="text-center">2023 @ MERN practice</p>
+    </>
   );
 };
 
