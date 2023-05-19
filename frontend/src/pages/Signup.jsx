@@ -4,21 +4,26 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import FormContainer from "../layouts/FormContainer";
 import FormInput from "../components/FormInput";
 
-const Login = () => {
+const Signup = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setName("");
     setEmail("");
     setPassword("");
-    alert(`email:${email}\npassword:${password}`);
+    setConfirmPassword("");
+    console.log(name, email, password, confirmPassword);
   };
 
   return (
     <FormContainer>
-      <h1>Log In</h1>
+      <h1>Sign Up</h1>
       <Form className="mt-3" onSubmit={submitHandler}>
+        <FormInput label="name" type="text" state={name} handler={setName} />
         <FormInput
           label="email address"
           type="email"
@@ -31,16 +36,22 @@ const Login = () => {
           state={password}
           handler={setPassword}
         />
+        <FormInput
+          label="confirm password"
+          type="password"
+          state={confirmPassword}
+          handler={setConfirmPassword}
+        />
         <Button type="submit" variant="dark" className="mt-3 px-5">
-          Log In
+          Sign Up
         </Button>
       </Form>
 
       <Row className="py-3">
         <Col>
-          New here?
-          <Link className="px-2 text-decoration-none" to="/signup">
-            Sign up
+          Have an account?
+          <Link className="px-2 text-decoration-none" to="/login">
+            Log In
           </Link>
         </Col>
       </Row>
@@ -48,4 +59,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
