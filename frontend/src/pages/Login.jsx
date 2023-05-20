@@ -1,5 +1,10 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "../slices/usersApiSlice";
+import { setCredentials } from "../slices/authSlice";
+
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import FormContainer from "../layouts/FormContainer";
 import FormInput from "../components/FormInput";
@@ -8,11 +13,32 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const dispatch = useDispatch();
+  //get state data from the store
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const [login] = useLoginMutation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    //redirect if logged in
+    if (userInfo) navigate("/");
+  });
+
   const submitHandler = async (e) => {
     e.preventDefault();
     setEmail("");
     setPassword("");
-    alert(`email:${email}\npassword:${password}`);
+
+    try {
+      //make request first
+      const res = await login({ email, password }).unwrap();
+      console.log("success!", res);
+      //if success then save res data to store
+      dispatch(setCredentials(res));
+    } catch (err) {
+      console.log("error occured!", err);
+    }
   };
 
   return (
