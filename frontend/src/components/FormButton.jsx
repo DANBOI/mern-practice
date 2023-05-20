@@ -3,7 +3,7 @@ import { Button, Spinner } from "react-bootstrap";
 // eslint-disable-next-line react/prop-types
 const FormButton = ({ loading, text }) => {
   return (
-    <Button type="submit" variant="dark" className="mt-3 px-5">
+    <Button type="submit" variant="dark" className="mt-5 px-5">
       {loading ? (
         <Spinner
           as="span"

@@ -14,6 +14,8 @@ import App from "./App.jsx";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import Profile from "./pages/Profile";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -22,8 +24,12 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} element={<Home />} />
-      <Route index={true} path="/login" element={<Login />} />
-      <Route index={true} path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      {/* if no userInfo,redirct */}
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/profile" element={<Profile />} />
+      </Route>
     </Route>
   )
 );

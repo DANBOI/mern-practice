@@ -8,13 +8,18 @@ const Hero = () => {
   return (
     <Container className="py-5 px-md-5">
       <Card className="p-5 d-flex-column gap-4 align-items-center text-center hero-card bg-light ">
-        <h1>MERN Stack</h1>
+        <h1>{userInfo ? `Hello,${userInfo.name}!` : "MERN Stack"}</h1>
         <p className="text-secondary fs-5">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero
           obcaecati iure laboriosam deleniti minima quaerat commodi, recusandae
           quod labore magnam ex? Nostrum illo numquam quo repellat, accusamus
           nam accusantium quaerat.
         </p>
+        {userInfo && (
+          <LinkContainer to="/profile">
+            <Button variant="dark">Update My Profile</Button>
+          </LinkContainer>
+        )}
         <div className="d-flex gap-3">
           {!userInfo && (
             <LinkContainer to="/login">
