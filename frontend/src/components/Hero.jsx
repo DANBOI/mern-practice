@@ -15,16 +15,19 @@ const Hero = () => {
           quod labore magnam ex? Nostrum illo numquam quo repellat, accusamus
           nam accusantium quaerat.
         </p>
-        {!userInfo && (
-          <div className="d-flex gap-3">
+        <div className="d-flex gap-3">
+          {!userInfo && (
             <LinkContainer to="/login">
               <Button variant="dark">Log In</Button>
             </LinkContainer>
-            <LinkContainer to="/signup">
-              <Button variant="outline-secondary">Sign Up</Button>
-            </LinkContainer>
-          </div>
-        )}
+          )}
+          <LinkContainer to="/signup">
+            <Button variant="outline-secondary">
+              Sign Up
+              {userInfo && " A NEW Account"}
+            </Button>
+          </LinkContainer>
+        </div>
       </Card>
     </Container>
   );

@@ -1,8 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+
+import { useDispatch } from "react-redux";
+import { useSignupMutation } from "../slices/usersApiSlice";
+import { setCredentials } from "../slices/authSlice";
+
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
+
 import FormContainer from "../layouts/FormContainer";
 import FormInput from "../components/FormInput";
+import FormButton from "../components/FormButton";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -10,13 +18,31 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const dispatch = useDispatch();
+  const [signup, { isLoading }] = useSignupMutation();
+  const navigate = useNavigate();
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    setName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    console.log(name, email, password, confirmPassword);
+
+    if (!name || !email || !password || !confirmPassword)
+      return toast.error("All these input fields are required!");
+
+    try {
+      if (password !== confirmPassword)
+        throw new Error("password are not equal!");
+
+      const res = await signup({ name, email, password }).unwrap();
+
+      toast.success(res?.data?.message);
+      //if success then save res data to store
+      dispatch(setCredentials(res));
+
+      navigate("/");
+    } catch (err) {
+      // console.log(err.message);
+      toast.error(err?.data?.message || err.message);
+    }
   };
 
   return (
@@ -42,9 +68,7 @@ const Signup = () => {
           state={confirmPassword}
           handler={setConfirmPassword}
         />
-        <Button type="submit" variant="dark" className="mt-3 px-5">
-          Sign Up
-        </Button>
+        <FormButton loading={isLoading} text="Sign Up"></FormButton>
       </Form>
 
       <Row className="py-3">
