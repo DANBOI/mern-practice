@@ -5,9 +5,11 @@ import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 import FormContainer from "../layouts/FormContainer";
 import FormInput from "../components/FormInput";
+import FormButton from "../components/FormButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +19,7 @@ const Login = () => {
   //get state data from the store
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,22 +29,25 @@ const Login = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setEmail("");
-    setPassword("");
 
     try {
       //make request first
       const res = await login({ email, password }).unwrap();
-      console.log("success!", res);
+
+      // console.log("success!", res);
+      toast.success("You are logged in!");
+
       //if success then save res data to store
       dispatch(setCredentials(res));
     } catch (err) {
-      console.log("error occured!", err);
+      // console.log("error occured!", err);
+      toast.error(err?.data?.message || err.error);
     }
   };
 
   return (
     <FormContainer>
+      {/* {isLoading && <Loader />} */}
       <h1>Log In</h1>
       <Form className="mt-3" onSubmit={submitHandler}>
         <FormInput
@@ -57,9 +62,7 @@ const Login = () => {
           state={password}
           handler={setPassword}
         />
-        <Button type="submit" variant="dark" className="mt-3 px-5">
-          Log In
-        </Button>
+        <FormButton loading={isLoading} text="Log In"></FormButton>
       </Form>
 
       <Row className="py-3">

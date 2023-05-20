@@ -1,7 +1,10 @@
+import { useSelector } from "react-redux";
 import { Container, Card, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 const Hero = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+
   return (
     <Container className="py-5 px-md-5">
       <Card className="p-5 d-flex-column gap-4 align-items-center text-center hero-card bg-light ">
@@ -12,14 +15,16 @@ const Hero = () => {
           quod labore magnam ex? Nostrum illo numquam quo repellat, accusamus
           nam accusantium quaerat.
         </p>
-        <div className="d-flex gap-3">
-          <LinkContainer to="/login">
-            <Button variant="dark">Log In</Button>
-          </LinkContainer>
-          <LinkContainer to="/signup">
-            <Button variant="outline-secondary">Sign Up</Button>
-          </LinkContainer>
-        </div>
+        {!userInfo && (
+          <div className="d-flex gap-3">
+            <LinkContainer to="/login">
+              <Button variant="dark">Log In</Button>
+            </LinkContainer>
+            <LinkContainer to="/signup">
+              <Button variant="outline-secondary">Sign Up</Button>
+            </LinkContainer>
+          </div>
+        )}
       </Card>
     </Container>
   );
