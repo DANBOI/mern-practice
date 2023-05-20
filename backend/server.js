@@ -1,6 +1,7 @@
 import express from "express";
 // import http from "http";
 import dotenv from "dotenv";
+import path from "path";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
@@ -27,8 +28,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
-app.get("/", (req, res) => res.send("API running!"));
 
-// catch-all-in-one
+if (process.env.NODE_ENV === "production") {
+  const __dirname = path.resolve();
+  // serve the static files from the frontend/dist ( if use create-react-app then the path is "frontend/build")
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  //   console.log(__dirname);
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running....");
+  });
+}
+
+// catch errors all-in-one
 app.use(notFound);
 app.use(errorHandler);
