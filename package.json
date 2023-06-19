@@ -5,10 +5,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node backend/server.js",
-    "server": "nodemon backend/server.js",
-    "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "server:dev": "nodemon backend/server.js",
+    "client:dev": "npm run dev --prefix frontend",
+    "dev:all": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "client:install": "npm install --prefix frontend",
+    "client:build": "npm run build --prefix frontend",
+    "install:all": "npm install && npm run client:install && npm run client:build",
+    "start": "node backend/server.js"
   },
   "keywords": [],
   "author": "",
